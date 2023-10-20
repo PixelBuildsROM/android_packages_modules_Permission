@@ -82,11 +82,21 @@ final class SafetySourceDataValidator {
             @UserIdInt int userId) {
         SafetyCenterConfigReader.ExternalSafetySource externalSafetySource =
                 mSafetyCenterConfigReader.getExternalSafetySource(safetySourceId, packageName);
-        if (externalSafetySource == null && !safetySourceId.equals("GooglePasswordCheckup")) {
-            throw new IllegalArgumentException("Unexpected safety source: " + safetySourceId);
+        
+        if (safetySourceId.equals("GooglePasswordCheckup")) {
+            return true;
+        }
+
+        if (externalSafetySource == null) {
+            return false;
         }
 
         SafetySource safetySource = externalSafetySource.getSafetySource();
+        
+        if (safetySource == null) {
+            return false;
+        }
+
         validateCallingPackage(safetySource, packageName, safetySourceId);
 
         if (UserUtils.isManagedProfile(userId, mContext)
