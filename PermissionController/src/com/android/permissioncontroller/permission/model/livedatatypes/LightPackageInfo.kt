@@ -54,11 +54,10 @@ data class LightPackageInfo(
     val areAttributionsUserVisible: Boolean,
     val attributionTagsToLabels: Map<String, Int>
 ) {
-    constructor(
-        pI: PackageInfo
-    ) : this(
-        pI.packageName,
-        pI.permissions?.map { perm -> LightPermInfo(perm) } ?: emptyList(),
+    constructor(pI: PackageInfo) : this(pI.packageName,
+        pI.permissions?.map { perm ->
+            LightPermInfo(perm, pI.applicationInfo!!.flags and ApplicationInfo.FLAG_SYSTEM != 0)
+        } ?: emptyList(),
         pI.requestedPermissions?.toList() ?: emptyList(),
         pI.requestedPermissionsFlags?.toList() ?: emptyList(),
         pI.applicationInfo.uid,
