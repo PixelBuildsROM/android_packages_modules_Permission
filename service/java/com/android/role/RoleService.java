@@ -65,6 +65,7 @@ import com.android.permission.util.UserUtils;
 import com.android.server.LocalManagerRegistry;
 import com.android.server.SystemService;
 import com.android.server.role.RoleServicePlatformHelper;
+import com.android.modules.utils.build.SdkLevel;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -483,6 +484,9 @@ public class RoleService extends SystemService implements RoleUserState.Callback
         @Override
         @Nullable
         public String getDefaultApplicationAsUser(@NonNull String roleName, @UserIdInt int userId) {
+            // The MANAGE_DEFAULT_APPLICATIONS permission is only available on U+
+            Preconditions.checkState(SdkLevel.isAtLeastU(),
+                    "This API is only available on Android 34 and above");
             UserUtils.enforceCrossUserPermission(userId, false, "getDefaultApplicationAsUser",
                     getContext());
             if (!UserUtils.isUserExistent(userId, getContext())) {
@@ -508,6 +512,9 @@ public class RoleService extends SystemService implements RoleUserState.Callback
         public void setDefaultApplicationAsUser(@NonNull String roleName,
                 @Nullable String packageName, @RoleManager.ManageHoldersFlags int flags,
                 @UserIdInt int userId, @NonNull RemoteCallback callback) {
+            // The MANAGE_DEFAULT_APPLICATIONS permission is only available on U+
+            Preconditions.checkState(SdkLevel.isAtLeastU(),
+                    "This API is only available on Android 34 and above");
             UserUtils.enforceCrossUserPermission(userId, false, "setDefaultApplicationAsUser",
                     getContext());
             if (!UserUtils.isUserExistent(userId, getContext())) {
