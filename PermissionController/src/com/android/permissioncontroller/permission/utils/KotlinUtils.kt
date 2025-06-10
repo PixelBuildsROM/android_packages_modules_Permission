@@ -1101,6 +1101,7 @@ object KotlinUtils {
         }
         return false
     }
+
     /**
      * Revokes a single runtime permission.
      *
